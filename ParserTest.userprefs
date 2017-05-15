@@ -1,0 +1,15 @@
+﻿<Properties StartupConfiguration="{3292D14D-B44B-49BA-BBA9-F06D2436FC31}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ParserTest/Program.cs">
+    <Files>
+      <File FileName="ParserTest/GameParser.cs" Line="49" Column="4" />
+      <File FileName="ParserTest/Program.cs" Line="8" Column="4" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.ParserTest PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+</Properties>

@@ -1,0 +1,5 @@
+/home/adam/Documents/Uni/CompSci/SU/ParserTest/ParserTest/ParserTest/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/adam/Documents/Uni/CompSci/SU/ParserTest/ParserTest/ParserTest/bin/Debug/ParserTest.exe.mdb
+/home/adam/Documents/Uni/CompSci/SU/ParserTest/ParserTest/ParserTest/bin/Debug/ParserTest.exe
+/home/adam/Documents/Uni/CompSci/SU/ParserTest/ParserTest/ParserTest/obj/x86/Debug/ParserTest.exe
+/home/adam/Documents/Uni/CompSci/SU/ParserTest/ParserTest/ParserTest/obj/x86/Debug/ParserTest.exe.mdb
