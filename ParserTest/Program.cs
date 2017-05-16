@@ -11,13 +11,22 @@ namespace ParserTest
 		public static void Main(string[] args)
 		{
 			var tec = new GameParser();
-			tec.GetLevel(1);
-			tec.ListLevel();
+            TextReader rd = tec.GetReader;
+			tec.GetLevel(rd);
+            tec._level = 1;
+			tec.ListLevels();
 			List<string> strl = tec.StringList;
+            Console.WriteLine(strl[40]);
 			foreach (var letter in strl)
 			{
 				Console.Write(letter);
 			}
+            tec.FillDictionary (rd);
+            var dct = tec.GetDictionary;
+            foreach (var keyval in dct) 
+            {
+                Console.WriteLine (keyval);
+            }
 		}
 	}
 }

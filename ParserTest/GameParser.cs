@@ -2,8 +2,8 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
+using System.Text.RegularExpressions;
+            
 namespace ParserTest
 {
 	public class GameParser
@@ -13,11 +13,23 @@ namespace ParserTest
 		/// </summary>
 		protected readonly List<string> _stringList = new List<string>();
 
+        /// <summary>
+        /// A dictionary containing key/value-pairs for ASCII-character to Path to image. 
+        /// </summary>
+        protected readonly Dictionary<string, string> _levelDictionary = new Dictionary<string, string> ();
+
 		/// <summary>
 		/// The predefined dimensions of the ASCII-art image
 		/// </summary>
 		private int _levelHeight = 23;
 		private int _levelWidth = 40;
+
+        /// <summary>
+        /// The level to be used
+        /// </summary>
+        public int _level;
+
+        private TextReader _reader;
 
 		/// <summary>
 		/// Retrives the files in the Levels-directory
@@ -47,7 +59,11 @@ namespace ParserTest
 			}
 		}
 
-		public void ListLevel()
+
+        /// <summary>
+        /// Presents user with available levels in directory
+        /// </summary>
+		public void ListLevels()
 		{
 			var files = GetFiles();
 			Console.WriteLine("Choose a level:");
@@ -55,7 +71,7 @@ namespace ParserTest
 			{
 				
 				Console.Write(i + ")");
-				Console.Write("{i}", files);
+				Console.Write(files[i]);
 				Console.WriteLine("");
 			}
 		}
@@ -64,13 +80,14 @@ namespace ParserTest
 		/// Retrieves an ASCII-art image and returns this as a string-list. 
 		/// </summary>
 		/// <returns>A level to be translated</returns>
-		/// <param name="level">A level - another method specifies the name and number</param>
-		public List<string> GetLevel(int level)
+		/// <param name="_level">A level - another method specifies the name and number</param>
+
+		public void GetLevel(TextReader reader)
 		{
 			var files = GetFiles();
 			try
 			{
-				using (TextReader reader = File.OpenText(files[level]))
+				using (reader = File.OpenText(files[_level]))
 				{
 					for (int i = 0; i < (_levelWidth * _levelHeight) + _levelHeight; i++)
 					{
@@ -80,23 +97,59 @@ namespace ParserTest
 							break;
 
 						char character = (char)integer;
-						_stringList.Add(character.ToString());
+                        string letter = character.ToString();
+
+                        if(letter != "\n")
+                        {
+                            _stringList.Add(letter);
+                        }
 					}
+                    _reader = reader;
 				}
-				return _stringList;
 			}
 			catch (IndexOutOfRangeException e)
 			{
 				string msg = e.Message;
 				Console.WriteLine("{0} Either the text-file does not contain a level - otherwise the level is incorrectly formatted", msg);
-				return _stringList;
 			}
 		}
 
 
+        public void FillDictionary(TextReader reader)
+        {
+            string identifierPattern = @"(^.)";
+            Regex identifierRgx = new Regex (identifierPattern, RegexOptions.IgnoreCase);
+            string pathPattern = @"((?<=[)])\s).*+$";
+            Regex pathRgx = new Regex (pathPattern, RegexOptions.IgnoreCase);
+            reader.ReadLine ().Skip (4);
+
+            string line;
+            while ((line = reader.ReadLine ()) != null) {
+                string identifier = identifierRgx.Match (line).ToString ();
+                string path = pathRgx.Match (line).ToString ();
+                _levelDictionary.Add (identifier, path);
+            }
+        }
+
+
+
+        /// <summary>
+        /// Gets the string list.
+        /// </summary>
+        /// <value>The string list.</value>
 		public List<string> StringList
 		{
 			get { return _stringList; }
 		}
+
+        public TextReader GetReader 
+        {
+            get { return _reader; }
+        }
+
+        public Dictionary<string, string> GetDictionary 
+        {
+            get { return _levelDictionary; }
+        }
 	}
 }

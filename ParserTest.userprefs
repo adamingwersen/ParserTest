@@ -1,8 +1,8 @@
 ﻿<Properties StartupConfiguration="{3292D14D-B44B-49BA-BBA9-F06D2436FC31}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="ParserTest/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ParserTest/GameParser.cs">
     <Files>
-      <File FileName="ParserTest/GameParser.cs" Line="49" Column="4" />
-      <File FileName="ParserTest/Program.cs" Line="8" Column="4" />
+      <File FileName="ParserTest/GameParser.cs" Line="116" Column="34" />
+      <File FileName="ParserTest/Program.cs" Line="17" Column="38" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
