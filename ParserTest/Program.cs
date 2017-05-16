@@ -21,12 +21,20 @@ namespace ParserTest
 			{
 				Console.Write(letter);
 			}
-            tec.FillDictionary (rd);
-            var dct = tec.GetDictionary;
-            foreach (var keyval in dct) 
-            {
-                Console.WriteLine (keyval);
-            }
+            tec.PopulateDictionary ();
+			//var dct = tec.GetDictionary;
+			//foreach (var keyval in dct) 
+			//{
+			//    Console.WriteLine (keyval);
+			//}
+			foreach (var obj in tec.paths)
+			{
+				Console.WriteLine(obj);
+			}
+			foreach (var obj in tec.ident)
+			{
+				Console.WriteLine(obj);
+			}
 		}
 	}
 }

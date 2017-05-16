@@ -29,7 +29,7 @@ namespace ParserTest
         /// </summary>
         public int _level;
 
-        private TextReader _reader;
+		private TextReader _reader;
 
 		/// <summary>
 		/// Retrives the files in the Levels-directory
@@ -80,7 +80,7 @@ namespace ParserTest
 		/// Retrieves an ASCII-art image and returns this as a string-list. 
 		/// </summary>
 		/// <returns>A level to be translated</returns>
-		/// <param name="_level">A level - another method specifies the name and number</param>
+		/// <param name="reader">A TextReader Object</param>
 
 		public void GetLevel(TextReader reader)
 		{
@@ -104,7 +104,6 @@ namespace ParserTest
                             _stringList.Add(letter);
                         }
 					}
-                    _reader = reader;
 				}
 			}
 			catch (IndexOutOfRangeException e)
@@ -114,22 +113,52 @@ namespace ParserTest
 			}
 		}
 
+		public List<string> ident = new List<string>();
+		public List<string> paths = new List<string>();
 
-        public void FillDictionary(TextReader reader)
-        {
-            string identifierPattern = @"(^.)";
-            Regex identifierRgx = new Regex (identifierPattern, RegexOptions.IgnoreCase);
-            string pathPattern = @"((?<=[)])\s).*+$";
-            Regex pathRgx = new Regex (pathPattern, RegexOptions.IgnoreCase);
-            reader.ReadLine ().Skip (4);
+		public void PopulateDictionary()
+		{
+			var files = GetFiles();
 
-            string line;
-            while ((line = reader.ReadLine ()) != null) {
-                string identifier = identifierRgx.Match (line).ToString ();
-                string path = pathRgx.Match (line).ToString ();
-                _levelDictionary.Add (identifier, path);
-            }
-        }
+			string identifierPattern = @"(^.)";
+			Regex identifierRgx = new Regex(identifierPattern);
+
+			string pathPattern = @"((?<=[)])\s).*$";
+			Regex pathRgx = new Regex(pathPattern);
+
+			string newLinePattern = @"\n";
+			Regex newLineRgx = new Regex(newLinePattern);
+
+			TextReader reader = _reader;
+			string line;
+			using (reader = File.OpenText(files[_level]))
+			{
+				for (var i = 0; i < 27; i++)
+				{
+					reader.ReadLine();
+				}
+				while ((line = reader.ReadLine()) != null)
+				{
+					ident.Add(line);
+					//if (line == "\n\n" || line == "\n")
+					//{
+					//	reader.ReadLine().Skip(100);
+					//}
+					//string identifier = identifierRgx.Match(line).ToString();
+					//ident.Add(identifier);
+					//string path = pathRgx.Match(line).ToString();
+					//paths.Add(path);
+					//_levelDictionary.Add(path, identifier);
+				}
+				foreach (string elem in ident) 
+				{
+					string temp = newLineRgx.Replace(elem, "");
+					string identifier = identifierRgx.Match(temp).ToString();
+					string path = pathRgx.Match(temp).ToString();
+					_levelDictionary.Add(identifier, path);
+				}
+			}
+		}
 
 
 

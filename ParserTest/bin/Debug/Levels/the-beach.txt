@@ -48,16 +48,6 @@ d) emperor-upper-left.png
 
 e) deep-bronze-square.png
 f) deep-bronze-left-half-circle.png
-g) deep-bronze-right-half-circle.png
-
-i) ironstone-square.png
-j) ironstone-square.png
-l) ironstone-lower-left.png
-u) ironstone-upper-right.png
-
-o) studio-square.png
-p) studio-upper-right.png
-q) studio-lower-left.png
 
 t) tacha-square.png
 s) tacha-upper-right.png
