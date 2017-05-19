@@ -11,7 +11,7 @@ namespace ParserTest
 		/// <summary>
 		/// A list of characters (string-format).
 		/// </summary>
-		protected readonly List<string> _stringList = new List<string>();
+		protected readonly List<string> _levelString = new List<string>();
 
         /// <summary>
         /// A dictionary containing key/value-pairs for ASCII-character to Path to image. 
@@ -93,7 +93,7 @@ namespace ParserTest
 		/// Retrieves an ASCII-art image and returns this as a string-list. 
 		/// </summary>
 		/// <returns>A level to be translated</returns>
-		/// <param name="reader">A TextReader Object</param>
+		/// <param name="reader">A TextReader object</param>
 
 		public void GetASCII(TextReader reader)
 		{
@@ -111,7 +111,7 @@ namespace ParserTest
 
                     if(letter != "\n")
                     {
-                        _stringList.Add(letter);
+                        _levelString.Add(letter);
                     }
 				}
 			}
@@ -122,6 +122,11 @@ namespace ParserTest
 			}
 		}
 
+
+        /// <summary>
+        /// Retrieves the level's properties and returns the level-name and platform mappings in seperate variables
+        /// </summary>
+        /// <param name="reader"> A TextReader object</param>
         public void GetProperties (TextReader reader)
         {
             string nameEval = "Name:";
@@ -144,12 +149,12 @@ namespace ParserTest
                 }
                 else if(line.Contains (nameEval) == true) 
                 {
-                    _levelName = nameRgx.Match (line).ToString ();
+                    _levelName = nameRgx.Match (line).ToString ().Replace(" ", "");
 
                 } 
                 else if (line.Contains (platformEval) == true) 
                 {
-                    _levelPlatforms = platformRgx.Match (line).ToString ();
+                    _levelPlatforms = platformRgx.Match (line).ToString ().Replace (" ", "");
                     //_levelPlatforms = Int32.Parse (plt);
                 } 
 
@@ -185,9 +190,9 @@ namespace ParserTest
         /// Gets the string list.
         /// </summary>
         /// <value>The string list.</value>
-		public List<string> GetStringList
+		public List<string> GetLevelString
 		{
-			get { return _stringList; }
+			get { return _levelString; }
 		}
 
         public string GetLevelname 
