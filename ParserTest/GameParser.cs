@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
             
 namespace ParserTest
@@ -24,6 +23,9 @@ namespace ParserTest
 		private int _levelHeight = 23;
 		private int _levelWidth = 40;
 
+        /// <summary>
+        /// Placeholder variables for level name and level platform mappings
+        /// </summary>
         private string _levelName;
         private string _levelPlatforms;
 
@@ -76,7 +78,10 @@ namespace ParserTest
         }
 
 
-
+        /// <summary>
+        /// Calls all subsequent methods for retrieving level information with a TextReader object
+        /// </summary>
+        /// <param name="level">A TextReader object.</param>
         public void GetLevel (int level)
         {
             var files = GetFiles ();
@@ -94,7 +99,6 @@ namespace ParserTest
 		/// </summary>
 		/// <returns>A level to be translated</returns>
 		/// <param name="reader">A TextReader object</param>
-
 		public void GetASCII(TextReader reader)
 		{
 			try
@@ -155,13 +159,16 @@ namespace ParserTest
                 else if (line.Contains (platformEval) == true) 
                 {
                     _levelPlatforms = platformRgx.Match (line).ToString ().Replace (" ", "");
-                    //_levelPlatforms = Int32.Parse (plt);
                 } 
 
             }
 
         }
 
+        /// <summary>
+        /// A method for parsing the level mappings of ASCII-characters
+        /// </summary>
+        /// <param name="reader">A TextReader object</param>
 		public void GetMappings(TextReader reader)
 		{
 			string identifierPattern = @"(^.)";
@@ -195,16 +202,28 @@ namespace ParserTest
 			get { return _levelString; }
 		}
 
+        /// <summary>
+        /// Gets the get levelname.
+        /// </summary>
+        /// <value> Level Name.</value>
         public string GetLevelname 
         {
             get { return _levelName; }
         }
 
+        /// <summary>
+        /// Gets the get level platforms.
+        /// </summary>
+        /// <value>Level platform mappings.</value>
         public string GetLevelPlatforms 
         {
             get { return _levelPlatforms; }
         }
 
+        /// <summary>
+        /// Gets the get dictionary file.
+        /// </summary>
+        /// <value> Level mappings </value>
         public Dictionary<string, string> GetDictionaryFile 
         {
             get { return _levelDictionary; }
