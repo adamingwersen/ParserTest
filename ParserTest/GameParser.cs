@@ -23,13 +23,13 @@ namespace ParserTest
 		/// </summary>
 		private int _levelHeight = 23;
 		private int _levelWidth = 40;
+        private string _levelName;
+        private string _levelPlatforms;
 
         /// <summary>
         /// The level to be used
         /// </summary>
         public int _level;
-
-		private TextReader _reader;
 
 		/// <summary>
 		/// Retrives the files in the Levels-directory
@@ -59,22 +59,34 @@ namespace ParserTest
 			}
 		}
 
-
         /// <summary>
         /// Presents user with available levels in directory
         /// </summary>
-		public void ListLevels()
-		{
-			var files = GetFiles();
-			Console.WriteLine("Choose a level:");
-			for (int i = 0; i < files.Length; i++)
-			{
-				
-				Console.Write(i + ")");
-				Console.Write(files[i]);
-				Console.WriteLine("");
-			}
-		}
+        public void ListLevels ()
+        {
+            var files = GetFiles ();
+            Console.WriteLine ("Choose a level:");
+            for (int i = 0; i < files.Length; i++) {
+
+                Console.Write (i + ")");
+                Console.Write (files [i]);
+                Console.WriteLine ("");
+            }
+        }
+
+
+
+        public void GetLevel (int level)
+        {
+            var files = GetFiles ();
+            using (var reader = File.OpenText (files [level])) 
+            {
+                GetASCII (reader);
+                GetProperties (reader);
+                GetMappings (reader);
+            }
+            
+        }
 
 		/// <summary>
 		/// Retrieves an ASCII-art image and returns this as a string-list. 
@@ -82,28 +94,24 @@ namespace ParserTest
 		/// <returns>A level to be translated</returns>
 		/// <param name="reader">A TextReader Object</param>
 
-		public void GetLevel(TextReader reader)
+		public void GetASCII(TextReader reader)
 		{
-			var files = GetFiles();
 			try
 			{
-				using (reader = File.OpenText(files[_level]))
+				for (int i = 0; i < (_levelWidth * _levelHeight) + _levelHeight; i++)
 				{
-					for (int i = 0; i < (_levelWidth * _levelHeight) + _levelHeight; i++)
-					{
-						int integer = reader.Read();
+					int integer = reader.Read();
 
-						if (integer == -1)
-							break;
+					if (integer == -1)
+						break;
 
-						char character = (char)integer;
-                        string letter = character.ToString();
+					char character = (char)integer;
+                    string letter = character.ToString();
 
-                        if(letter != "\n")
-                        {
-                            _stringList.Add(letter);
-                        }
-					}
+                    if(letter != "\n")
+                    {
+                        _stringList.Add(letter);
+                    }
 				}
 			}
 			catch (IndexOutOfRangeException e)
@@ -113,50 +121,57 @@ namespace ParserTest
 			}
 		}
 
-		public List<string> ident = new List<string>();
-		public List<string> paths = new List<string>();
+        public void GetProperties (TextReader reader)
+        {
+            string line;
+            string nameEval = "Name:";
+            string platformEval = "Platforms:";
 
-		public void PopulateDictionary()
+            string leftPattern = @"((?<=[";
+            string rightPattern = @"])\s).*$";
+
+            Regex nameRgx = new Regex (leftPattern + nameEval + rightPattern);
+            Regex platformRgx = new Regex (leftPattern + platformEval + rightPattern);
+
+            for (int i = 0; i < 4; i++) 
+            {
+                line = reader.ReadLine ();
+                if (line.Contains (nameEval) == true) 
+                {
+                    _levelName = nameRgx.Match (line).ToString ();
+
+                } else if (line.Contains (platformEval) == true) 
+                {
+                    _levelPlatforms = platformRgx.Match (line).ToString ();
+                    //_levelPlatforms = Int32.Parse (plt);
+                } else 
+                {
+                    reader.ReadLine ();
+                }
+
+            }
+
+        }
+
+		public void GetMappings(TextReader reader)
 		{
-			var files = GetFiles();
-
 			string identifierPattern = @"(^.)";
 			Regex identifierRgx = new Regex(identifierPattern);
 
 			string pathPattern = @"((?<=[)])\s).*$";
 			Regex pathRgx = new Regex(pathPattern);
 
-			string newLinePattern = @"\n";
-			Regex newLineRgx = new Regex(newLinePattern);
-
-			TextReader reader = _reader;
 			string line;
-			using (reader = File.OpenText(files[_level]))
+
+			while ((line = reader.ReadLine()) != null)
 			{
-				for (var i = 0; i < 27; i++)
+				if (line == "")
 				{
-					reader.ReadLine();
+                    continue;
 				}
-				while ((line = reader.ReadLine()) != null)
-				{
-					ident.Add(line);
-					//if (line == "\n\n" || line == "\n")
-					//{
-					//	reader.ReadLine().Skip(100);
-					//}
-					//string identifier = identifierRgx.Match(line).ToString();
-					//ident.Add(identifier);
-					//string path = pathRgx.Match(line).ToString();
-					//paths.Add(path);
-					//_levelDictionary.Add(path, identifier);
-				}
-				foreach (string elem in ident) 
-				{
-					string temp = newLineRgx.Replace(elem, "");
-					string identifier = identifierRgx.Match(temp).ToString();
-					string path = pathRgx.Match(temp).ToString();
-					_levelDictionary.Add(identifier, path);
-				}
+				string identifier = identifierRgx.Match(line).ToString();
+				string path = pathRgx.Match(line).ToString();
+				_levelDictionary.Add(identifier, path);
 			}
 		}
 
@@ -166,17 +181,27 @@ namespace ParserTest
         /// Gets the string list.
         /// </summary>
         /// <value>The string list.</value>
-		public List<string> StringList
+		public List<string> GetStringList
 		{
 			get { return _stringList; }
 		}
 
-        public TextReader GetReader 
+        public string GetLevelname 
         {
-            get { return _reader; }
+            get { return _levelName;}
         }
 
-        public Dictionary<string, string> GetDictionary 
+        public string GetLevelPlatforms 
+        {
+            get { return _levelPlatforms; }
+        }
+
+        //public TextReader GetReader 
+        //{
+        //    get { return _reader; }
+        //}
+
+        public Dictionary<string, string> GetDictionaryFile 
         {
             get { return _levelDictionary; }
         }

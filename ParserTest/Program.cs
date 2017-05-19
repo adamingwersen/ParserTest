@@ -11,30 +11,27 @@ namespace ParserTest
 		public static void Main(string[] args)
 		{
 			var tec = new GameParser();
-            TextReader rd = tec.GetReader;
-			tec.GetLevel(rd);
-            tec._level = 1;
 			tec.ListLevels();
-			List<string> strl = tec.StringList;
-            Console.WriteLine(strl[40]);
+            tec.GetLevel (1);
+			List<string> strl = tec.GetStringList;
 			foreach (var letter in strl)
 			{
 				Console.Write(letter);
 			}
-            tec.PopulateDictionary ();
-			//var dct = tec.GetDictionary;
-			//foreach (var keyval in dct) 
-			//{
-			//    Console.WriteLine (keyval);
-			//}
-			foreach (var obj in tec.paths)
-			{
-				Console.WriteLine(obj);
-			}
-			foreach (var obj in tec.ident)
-			{
-				Console.WriteLine(obj);
-			}
+
+            var nm = tec.GetLevelname;
+            Console.WriteLine (nm);
+            var pltfm = tec.GetLevelPlatforms;
+            Console.WriteLine (pltfm);
+
+            var dict = tec.GetDictionaryFile;
+            foreach (var obj in dict) 
+            {
+                Console.WriteLine (obj);
+            }
+
+
+
 		}
 	}
 }
