@@ -23,6 +23,7 @@ namespace ParserTest
 		/// </summary>
 		private int _levelHeight = 23;
 		private int _levelWidth = 40;
+
         private string _levelName;
         private string _levelPlatforms;
 
@@ -123,31 +124,34 @@ namespace ParserTest
 
         public void GetProperties (TextReader reader)
         {
-            string line;
             string nameEval = "Name:";
             string platformEval = "Platforms:";
 
-            string leftPattern = @"((?<=[";
-            string rightPattern = @"])\s).*$";
+            string leftPattern = @"(?<=[";
+            string rightPattern = @"])\s.*$";
 
             Regex nameRgx = new Regex (leftPattern + nameEval + rightPattern);
             Regex platformRgx = new Regex (leftPattern + platformEval + rightPattern);
 
+            string line;
+
             for (int i = 0; i < 4; i++) 
             {
                 line = reader.ReadLine ();
-                if (line.Contains (nameEval) == true) 
+                if (line == "") 
+                {
+                    continue;
+                }
+                else if(line.Contains (nameEval) == true) 
                 {
                     _levelName = nameRgx.Match (line).ToString ();
 
-                } else if (line.Contains (platformEval) == true) 
+                } 
+                else if (line.Contains (platformEval) == true) 
                 {
                     _levelPlatforms = platformRgx.Match (line).ToString ();
                     //_levelPlatforms = Int32.Parse (plt);
-                } else 
-                {
-                    reader.ReadLine ();
-                }
+                } 
 
             }
 
@@ -188,18 +192,13 @@ namespace ParserTest
 
         public string GetLevelname 
         {
-            get { return _levelName;}
+            get { return _levelName; }
         }
 
         public string GetLevelPlatforms 
         {
             get { return _levelPlatforms; }
         }
-
-        //public TextReader GetReader 
-        //{
-        //    get { return _reader; }
-        //}
 
         public Dictionary<string, string> GetDictionaryFile 
         {

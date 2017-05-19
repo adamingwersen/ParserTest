@@ -12,7 +12,7 @@ namespace ParserTest
 		{
 			var tec = new GameParser();
 			tec.ListLevels();
-            tec.GetLevel (1);
+            tec.GetLevel (0);
 			List<string> strl = tec.GetStringList;
 			foreach (var letter in strl)
 			{
@@ -20,6 +20,7 @@ namespace ParserTest
 			}
 
             var nm = tec.GetLevelname;
+            Console.WriteLine ();
             Console.WriteLine (nm);
             var pltfm = tec.GetLevelPlatforms;
             Console.WriteLine (pltfm);
