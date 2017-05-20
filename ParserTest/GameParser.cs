@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
             
 namespace ParserTest
@@ -27,7 +28,7 @@ namespace ParserTest
         /// Placeholder variables for level name and level platform mappings
         /// </summary>
         private string _levelName;
-        private string _levelPlatforms;
+        private List<string> _levelPlatforms;
 
         /// <summary>
         /// The level to be used
@@ -158,7 +159,7 @@ namespace ParserTest
                 } 
                 else if (line.Contains (platformEval) == true) 
                 {
-                    _levelPlatforms = platformRgx.Match (line).ToString ().Replace (" ", "");
+                    _levelPlatforms = platformRgx.Match (line).ToString ().Replace(" ", "").Split (',').ToList ();
                 } 
 
             }
@@ -191,8 +192,6 @@ namespace ParserTest
 			}
 		}
 
-
-
         /// <summary>
         /// Gets the string list.
         /// </summary>
@@ -215,7 +214,7 @@ namespace ParserTest
         /// Gets the get level platforms.
         /// </summary>
         /// <value>Level platform mappings.</value>
-        public string GetLevelPlatforms 
+        public List<string> GetLevelPlatforms 
         {
             get { return _levelPlatforms; }
         }
