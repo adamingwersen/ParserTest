@@ -1,8 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using GameConcepts.GameParser;
+
+
 
 namespace ParserTest
 {
@@ -10,13 +10,13 @@ namespace ParserTest
 	{
 		public static void Main(string[] args)
 		{
-			var tec = new GameParser();
+            var tec = new GameParser ();
 
 			tec.ListLevels();
-            tec.GetLevel (0);
+            tec.GetLevel (2);
 
 
-			List<string> strl = tec.GetLevelString;
+			List<string> strl = tec.GetAsciiString;
 			foreach (var letter in strl)
 			{
 				Console.Write(letter);
