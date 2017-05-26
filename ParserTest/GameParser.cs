@@ -14,6 +14,11 @@ namespace GameConcepts.GameParser
         protected readonly List<string> _AsciiString = new List<string> ();
 
         /// <summary>
+        /// A list of the level names
+        /// </summary>
+        private List<string> _namesOfLevels = new List<string> ();
+
+        /// <summary>
         /// A dictionary containing key/value-pairs for ASCII-character to Path to image. 
         /// </summary>
         protected readonly Dictionary<string, string> _levelDictionary = new Dictionary<string, string> ();
@@ -31,9 +36,15 @@ namespace GameConcepts.GameParser
         private List<string> _levelPlatforms;
 
         /// <summary>
+        /// A placeholder value for the number of files in directory
+        /// </summary>
+        private int _numberOfLevels;
+
+        /// <summary>
         /// The level to be used
         /// </summary>
-        public int _level;
+        public int level;
+
 
         /// <summary>
         /// Retrives the files in the Levels-directory
@@ -59,17 +70,25 @@ namespace GameConcepts.GameParser
         }
 
         /// <summary>
-        /// Presents user with available levels in directory
+        /// Sets the number of levels
         /// </summary>
-        public void ListLevels ()
+        public void SetListLevels ()
         {
             var files = GetFiles ();
-            Console.WriteLine ("Choose a level:");
-            for (int i = 0; i < files.Length; i++) {
+            _numberOfLevels = files.Length;
+        }
 
-                Console.Write (i + ")");
-                Console.Write (files [i]);
-                Console.WriteLine ("");
+        /// <summary>
+        /// Sets the list of level names.
+        /// </summary>
+        public void SetListLevelNames ()
+        {
+            Regex regx = new Regex (@"([^/]+(?=[\.]))");
+
+            var files = GetFiles ();
+            foreach (var file in files) {
+                var name = regx.Match (file).ToString ();
+                _namesOfLevels.Add (name);
             }
         }
 
@@ -78,13 +97,15 @@ namespace GameConcepts.GameParser
         /// Calls all subsequent methods for retrieving level information with a TextReader object
         /// </summary>
         /// <param name="level">A TextReader object.</param>
-        public void GetLevel (int level)
+        public void SetGameParser (int level)
         {
             var files = GetFiles ();
             using (var reader = File.OpenText (files [level])) {
-                GetASCII (reader);
-                GetProperties (reader);
-                GetMappings (reader);
+                SetListLevels ();
+                SetListLevelNames ();
+                SetASCII (reader);
+                SetProperties (reader);
+                SetMappings (reader);
             }
         }
 
@@ -93,7 +114,7 @@ namespace GameConcepts.GameParser
         /// </summary>
         /// <returns>A level to be translated</returns>
         /// <param name="reader">A TextReader object</param>
-        public void GetASCII (TextReader reader)
+        private void SetASCII (TextReader reader)
         {
             try {
                 for (int i = 0; i < (_levelWidth * _levelHeight) + _levelHeight; i++) {
@@ -119,7 +140,7 @@ namespace GameConcepts.GameParser
         /// Retrieves the level's properties and returns the level-name and platform mappings in seperate variables
         /// </summary>
         /// <param name="reader"> A TextReader object</param>
-        public void GetProperties (TextReader reader)
+        private void SetProperties (TextReader reader)
         {
             string nameEval = "Name:";
             string platformEval = "Platforms:";
@@ -149,7 +170,7 @@ namespace GameConcepts.GameParser
         /// A method for parsing the level mappings of ASCII-characters
         /// </summary>
         /// <param name="reader">A TextReader object</param>
-        public void GetMappings (TextReader reader)
+        private void SetMappings (TextReader reader)
         {
             string identifierPattern = @"(^.)";
             Regex identifierRgx = new Regex (identifierPattern);
@@ -199,6 +220,18 @@ namespace GameConcepts.GameParser
         /// <value> Level mappings </value>
         public Dictionary<string, string> GetDictionaryFile {
             get { return _levelDictionary; }
+        }
+
+        /// <summary>
+        /// Get the number of levels available
+        /// </summary>
+        /// <value> Available levels </value>
+        public int GetNumberOfLevels {
+            get { return _numberOfLevels; }
+        }
+
+        public List<string> GetNamesOfLevels {
+            get { return _namesOfLevels; }
         }
     }
 }

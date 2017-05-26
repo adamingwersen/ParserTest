@@ -35,6 +35,12 @@ namespace ParserTest
             {
                 Console.WriteLine (obj);
             }
+
+            var rnd = new Random ();
+            for (int i = 0; i < 100; i++) 
+            {
+                Console.WriteLine (rnd.Next (0, 3));
+            }
 		}
 	}
 }
